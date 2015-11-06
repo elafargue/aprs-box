@@ -1,0 +1,124 @@
+{
+    "docs": [
+        {
+            "location": "/", 
+            "text": "Welcome to APRS Box\n\n\nThis site is a set of documents that will help you build a fairly complete and autonomous APRS base station, with the following capabilities:\n\n\n\n\nAPRS Reception\n\n\nAutonomous mapping of APRS stations through a web browser\n\n\nRepeating and gating to Internet (iGating)\n\n\nSimple monitoring\n\n\n\n\nThis documentation can be used in several different ways: as a user reference, as a detailed guide to create and customize your own station, or as quick start guide to configure a BeagleBone/Rapsberry Pi in a couple of minutes and get going.", 
+            "title": "Overview"
+        }, 
+        {
+            "location": "/#welcome-to-aprs-box", 
+            "text": "This site is a set of documents that will help you build a fairly complete and autonomous APRS base station, with the following capabilities:   APRS Reception  Autonomous mapping of APRS stations through a web browser  Repeating and gating to Internet (iGating)  Simple monitoring   This documentation can be used in several different ways: as a user reference, as a detailed guide to create and customize your own station, or as quick start guide to configure a BeagleBone/Rapsberry Pi in a couple of minutes and get going.", 
+            "title": "Welcome to APRS Box"
+        }, 
+        {
+            "location": "/userdoc/", 
+            "text": "", 
+            "title": "User guide"
+        }, 
+        {
+            "location": "/hardware/", 
+            "text": "Hardware\n\n\nThe objective of this setup is to be as compact and low power as possible. I selected a BeagleBone Black, but it should be possible to use many different kinds of single board computers:\n\n\n\n\nBeaglebone black/green\n\n\nRaspberry Pi\n\n\nCubieBoard\n\n\n\n\nComputer board\n\n\nAs mentioned above, pretty much any embedded computer that can run a current version of Linux will be good for this. My personal preference goes to the BeagleBone, though the CubieBoard's built-in sound card certainly sounds like a very interesting choice.\n\n\nSound card\n\n\nThe sound card is usually the tricky part of those embedded computers. The BeagleBone does not have one, for instance. The CubieBoard does.\n\n\nFor this build, I elected to use the Beaglebone Audio cape (version 2). There are many things I find irritating with this sound card, and its drivers are very rough around the edges, but all in all, it does the job if you are careful. This doc describes how to make it work properly, and I spent quite a few hours doing that...\n\n\nPTT Switch\n\n\nThe last hardware part is a way to key your radio transceiver. This is actually very straightforward: if you look at the documentation of Direwolf (which is audio modem we are using), you can simply use GPIO lines on your BeagleBone with a simple transistor, and you're in business.\n\n\nOn this setup, I am using the following GPIOs:\n- Connector P9 pin 14 (GPIO 50) : DCD Led. Lights up when Direwolf detects a radio carrier\n- Connector P9 pin 16 (GPIO 51): PTT key. You will probably need a PNP transistor to key your radio, depending on the model.\n\n\nOptional components\n\n\nOne of the Beaglebone's great features is its ability to operate on USB power, which makes it a truly portable setup. But for general use, you might want to install a small WiFi USB dongle and turn it into a WiFi access point. More on this in the configuration section.", 
+            "title": "Hardware"
+        }, 
+        {
+            "location": "/hardware/#hardware", 
+            "text": "The objective of this setup is to be as compact and low power as possible. I selected a BeagleBone Black, but it should be possible to use many different kinds of single board computers:   Beaglebone black/green  Raspberry Pi  CubieBoard", 
+            "title": "Hardware"
+        }, 
+        {
+            "location": "/hardware/#computer-board", 
+            "text": "As mentioned above, pretty much any embedded computer that can run a current version of Linux will be good for this. My personal preference goes to the BeagleBone, though the CubieBoard's built-in sound card certainly sounds like a very interesting choice.", 
+            "title": "Computer board"
+        }, 
+        {
+            "location": "/hardware/#sound-card", 
+            "text": "The sound card is usually the tricky part of those embedded computers. The BeagleBone does not have one, for instance. The CubieBoard does.  For this build, I elected to use the Beaglebone Audio cape (version 2). There are many things I find irritating with this sound card, and its drivers are very rough around the edges, but all in all, it does the job if you are careful. This doc describes how to make it work properly, and I spent quite a few hours doing that...", 
+            "title": "Sound card"
+        }, 
+        {
+            "location": "/hardware/#ptt-switch", 
+            "text": "The last hardware part is a way to key your radio transceiver. This is actually very straightforward: if you look at the documentation of Direwolf (which is audio modem we are using), you can simply use GPIO lines on your BeagleBone with a simple transistor, and you're in business.  On this setup, I am using the following GPIOs:\n- Connector P9 pin 14 (GPIO 50) : DCD Led. Lights up when Direwolf detects a radio carrier\n- Connector P9 pin 16 (GPIO 51): PTT key. You will probably need a PNP transistor to key your radio, depending on the model.", 
+            "title": "PTT Switch"
+        }, 
+        {
+            "location": "/hardware/#optional-components", 
+            "text": "One of the Beaglebone's great features is its ability to operate on USB power, which makes it a truly portable setup. But for general use, you might want to install a small WiFi USB dongle and turn it into a WiFi access point. More on this in the configuration section.", 
+            "title": "Optional components"
+        }, 
+        {
+            "location": "/software/", 
+            "text": "Software installation\n\n\nThis guide takes you across two tracks:\n\n\n\n\nDetailed description of the software setup\n\n\nQuick start guide to let you configure the box in (almost) 'fire and forget' mode\n\n\n\n\nThe software installation covers the following elements:\n\n\n\n\nTNC (radio modem)\n\n\nMapping server\n\n\nMonitoring facility\n\n\nSystem configuration for long term autonomous runnning\n\n\n\n\nQuick start guide\n\n\nOperating system installation\n\n\nYou will need a decent sizer uSD card \u2013 32GB is perfect if you intend to store a lot of offline maps.\n\n\nUse Debian Jessie 8 (http://elinux.org/BeagleBoardDebian#BeagleBone.2FBeagleBone_Black), and downgrade kernel to 3.8 series to enable the use of the audio cape \u2013 the current edge kernel is in flux when it comes to BBB capes support.\n\n\napt-get install l linux-image-3.8.13-bone73\n\n\n\n\nAfter reboot, you should disable the built-in default HDMI cape which takes over the BBB audio channels: edit \n/boot/uEnv.txt\n and add the cape_disable and cape_enable lines below the \nuname_r\n key:\n\n\nuname_r=3.8.13-bone73\n\ncape_disable=capemgr.disable_partno=BB-BONELT-HDMI\ncape_enable=capemgr.enable_partno=BB-BONE-AUDI-02\n\n\n\n\nThe disable of HDMI is required because the Audio Cape uses the BBB's built-in audio chip which is normally used by HDMI, so it won't run if HDMI is enabled.\n\n\nYou should then reboot, and  launch \nalsamixer\n to check everything is loading.\n\n\nSound card configuration\n\n\nThe radio audio output is connected to the BBB using the BLUE jack.\n\n\nIn alsamixer, you will need to mute all \"Right PGA Mixer XXX\" and \"Left PGA Mixer XXX\" EXCEPT \"Right PGA Mixer Mic3L\" and \"Left PGA Mixer Mic3L\". Be very careful to enable Mic3L in BOTH cases, other if you use a fancy radio like the Elecraft KX3, the \u201cstereo\u201d effect of the radio messes everything up!\n\n\nSoftware components\n\n\nBefore installing any of the additional software components below, make sure you have all the fundamentals for compilation installed on your Beaglebone:\n\n\nsudo apt-get install cmake build-essential libusb-1.0-0-dev libasound2-dev\n\n\n\n\nDirewolf\n\n\nDirewolf\n is our sound card modem.\n\n\nPolaric server\n\n\nPolaric\n is used to map APRS stations on a web site.\n\n\nMonitoring\n\n\nWe are using log.io to provide a simple read-only interface to monitor how the box is doing. In day to day use, this has proved very valuable to check that the box is running smoothly.", 
+            "title": "Overview"
+        }, 
+        {
+            "location": "/software/#software-installation", 
+            "text": "This guide takes you across two tracks:   Detailed description of the software setup  Quick start guide to let you configure the box in (almost) 'fire and forget' mode   The software installation covers the following elements:   TNC (radio modem)  Mapping server  Monitoring facility  System configuration for long term autonomous runnning", 
+            "title": "Software installation"
+        }, 
+        {
+            "location": "/software/#quick-start-guide", 
+            "text": "Operating system installation  You will need a decent sizer uSD card \u2013 32GB is perfect if you intend to store a lot of offline maps.  Use Debian Jessie 8 (http://elinux.org/BeagleBoardDebian#BeagleBone.2FBeagleBone_Black), and downgrade kernel to 3.8 series to enable the use of the audio cape \u2013 the current edge kernel is in flux when it comes to BBB capes support.  apt-get install l linux-image-3.8.13-bone73  After reboot, you should disable the built-in default HDMI cape which takes over the BBB audio channels: edit  /boot/uEnv.txt  and add the cape_disable and cape_enable lines below the  uname_r  key:  uname_r=3.8.13-bone73\n\ncape_disable=capemgr.disable_partno=BB-BONELT-HDMI\ncape_enable=capemgr.enable_partno=BB-BONE-AUDI-02  The disable of HDMI is required because the Audio Cape uses the BBB's built-in audio chip which is normally used by HDMI, so it won't run if HDMI is enabled.  You should then reboot, and  launch  alsamixer  to check everything is loading.  Sound card configuration  The radio audio output is connected to the BBB using the BLUE jack.  In alsamixer, you will need to mute all \"Right PGA Mixer XXX\" and \"Left PGA Mixer XXX\" EXCEPT \"Right PGA Mixer Mic3L\" and \"Left PGA Mixer Mic3L\". Be very careful to enable Mic3L in BOTH cases, other if you use a fancy radio like the Elecraft KX3, the \u201cstereo\u201d effect of the radio messes everything up!", 
+            "title": "Quick start guide"
+        }, 
+        {
+            "location": "/software/#software-components", 
+            "text": "Before installing any of the additional software components below, make sure you have all the fundamentals for compilation installed on your Beaglebone:  sudo apt-get install cmake build-essential libusb-1.0-0-dev libasound2-dev  Direwolf  Direwolf  is our sound card modem.  Polaric server  Polaric  is used to map APRS stations on a web site.  Monitoring  We are using log.io to provide a simple read-only interface to monitor how the box is doing. In day to day use, this has proved very valuable to check that the box is running smoothly.", 
+            "title": "Software components"
+        }, 
+        {
+            "location": "/direwolf/", 
+            "text": "Direwolf\n\n\nDirewolf can be found at \nhttps://github.com/wb2osz/direwolf\n. This box is based on Direwolf 1.2.\n\n\nCompiling Direwolf\n\n\nDirewolf is surprisingly easy to compile: if you followed the instructions in \nSoftware\n, then it is a matter of cloning the Direwolf repository on your Beaglebone, then follow the standard instructions for Linux:\n\n\ngit clone https://www.github.com/wb2osz/direwolf\ncd direwolf\ngit checkout 1.2\nmake\nsudo make install\nmake install-conf\n\n\n\n\nConfiguring Direwolf\n\n\nYou should then install the configuration for Direwolf in \n/etc/direwolf/direwolf.conf\n . This file, along with all other configuration files is located in the github repository of the project. \n/etc/direwolf/direwolf.conf\n.\n\n\nYou will need to set the \"MYCALL\" variable to your actual call sign before launching Direwolf, of course!\n\n\nAlso depending on how you are connecting to your radio, you can/should update the \nPTT\n and \nDCD\n lines to reflect the GPIOs you are using.\n\n\nLast: by default, direwolf.conf is configured to listen only. Configure the \"PBEACON\" and/or \"OBEACON\" lines to enable beaconing if you want to.\n\n\nConfiguring Direwolf logs\n\n\nFor a box that is running 24/7, you should make sure direwolf's log output is properly handled. This is done through the syslog and logrotate facilities:\n\n\n\n\n/etc/logrotate.d/direwolf\n\n\n/etc/rsyslog.d/direwolf.conf\n\n\n\n\nThis way, all direwolf log output will be directed to \n/var/log/direwolf.log\n and be automatically rotated every day.\n\n\nAutomatically starting Direwolf\n\n\nThen next step is to make sure Direwolf automatically starts when the box boots:\n\n\n\n\n/etc/init.d/direwolf\n\n\n\n\nThis script needs to be linked to runlevel 2:\n\n\ncd /etc/rc2.d/\nln -s ../init.d/direwolf S001direwolf\n\n\n\n\nso that Direwolf starts.\n\n\nAt this stage, you can reboot your Beaglebone to check that Direwolf does start properly:\n\n\nps aux | grep direwolf\ntail -f /var/log/direwolf.log\n\n\n\n\n... you can then move on to installing \nPolaric Server", 
+            "title": "Direwolf"
+        }, 
+        {
+            "location": "/direwolf/#direwolf", 
+            "text": "Direwolf can be found at  https://github.com/wb2osz/direwolf . This box is based on Direwolf 1.2.", 
+            "title": "Direwolf"
+        }, 
+        {
+            "location": "/direwolf/#compiling-direwolf", 
+            "text": "Direwolf is surprisingly easy to compile: if you followed the instructions in  Software , then it is a matter of cloning the Direwolf repository on your Beaglebone, then follow the standard instructions for Linux:  git clone https://www.github.com/wb2osz/direwolf\ncd direwolf\ngit checkout 1.2\nmake\nsudo make install\nmake install-conf", 
+            "title": "Compiling Direwolf"
+        }, 
+        {
+            "location": "/direwolf/#configuring-direwolf", 
+            "text": "You should then install the configuration for Direwolf in  /etc/direwolf/direwolf.conf  . This file, along with all other configuration files is located in the github repository of the project.  /etc/direwolf/direwolf.conf .  You will need to set the \"MYCALL\" variable to your actual call sign before launching Direwolf, of course!  Also depending on how you are connecting to your radio, you can/should update the  PTT  and  DCD  lines to reflect the GPIOs you are using.  Last: by default, direwolf.conf is configured to listen only. Configure the \"PBEACON\" and/or \"OBEACON\" lines to enable beaconing if you want to.", 
+            "title": "Configuring Direwolf"
+        }, 
+        {
+            "location": "/direwolf/#configuring-direwolf-logs", 
+            "text": "For a box that is running 24/7, you should make sure direwolf's log output is properly handled. This is done through the syslog and logrotate facilities:   /etc/logrotate.d/direwolf  /etc/rsyslog.d/direwolf.conf   This way, all direwolf log output will be directed to  /var/log/direwolf.log  and be automatically rotated every day.", 
+            "title": "Configuring Direwolf logs"
+        }, 
+        {
+            "location": "/direwolf/#automatically-starting-direwolf", 
+            "text": "Then next step is to make sure Direwolf automatically starts when the box boots:   /etc/init.d/direwolf   This script needs to be linked to runlevel 2:  cd /etc/rc2.d/\nln -s ../init.d/direwolf S001direwolf  so that Direwolf starts.  At this stage, you can reboot your Beaglebone to check that Direwolf does start properly:  ps aux | grep direwolf\ntail -f /var/log/direwolf.log  ... you can then move on to installing  Polaric Server", 
+            "title": "Automatically starting Direwolf"
+        }, 
+        {
+            "location": "/polaric/", 
+            "text": "Polaric server\n\n\nPolaric is a really cool combination of APRS daemon that connects to Direwolf, and a Web application that provides a complete mapping solution on the Beaglebone.\n\n\nOne of the really interesting aspects of Polaric, is its ability to serve cached maps from the providers that support that option, making the box really autonomous if required.\n\n\nQuick install\n\n\nPolaric can be a bit complicated to compile from scratch, so I am providing a set of binary packages that will get you going in just a few minutes:\n\n\n\n\npolaric-aprsd\n\n\npolaric-webapp\n\n\npolaric-webconfig\n\n\n\n\nYou will get a lot of unresolved dependencies, and you need to run\n\n\nsudo apt-get -f install\n\n\n\n\nin order to automatically download and solve all those dependencies.\n\n\nConfiguration\n\n\nOnce Polaric server is installed, you need to configure it\n\n\n\n\n/etc/polaric-aprsd/\n\n\n/etc/polaric/webapp/\n\n\n/var/lib/polaric/config.xml\n\n\n\n\nContain all the setup files. Be careful about the following:\n\n\n\n\nUse your own callsign in \n/etc/polaric-aprsd/server.ini\n and \n/var/lib/polaric/config.xml\n.\n\n\n\n\nLog rotation and autostart\n\n\nLike we did for Direwolf, you should make sure polaric's log output is properly handled. This is done through the syslog and logrotate facilities:\n\n\n\n\n/etc/logrotate.d/polaric-aprsd\n\n\n\n\nThis way, all of Polaric's log output will be directed to \n/var/log/polaric/*.log\n and be automatically rotated every day.\n\n\nAuto start is handled in the init scripts:\n\n\n\n\n/etc/init.d/polaric-aprsd\n\n\n/etc/init.d/polaric-webapp\n\n\n\n\nCompiling Polaric yourself\n\n\nYou do not need to do this if you followed the steps above!\n\n\nFirst, install the build dependencies:\n\n\nsudo apt-get install debhelper gettext-base libgettext-commons-java  openjdk-8-jdk scala byacc-j librxtx-java jflex closure-compiler\n\n\n\n\nModify the aprsd Makefile to use byaccj instead of yacc.\n\n\nIn webapp, modify compile-js.sh to add alias ccompile=closure-compiler at the beginning of the file.\n\n\nYou can then build the Debian packages for aprsd, webapp and webconfig-plugin (in that order) by launching\n\n\nfakeroot ./debian/rules binary\n\n\n\n\nin each project directory (aprsd, webapp, webconfig-plugin).", 
+            "title": "Polaric Server"
+        }, 
+        {
+            "location": "/polaric/#polaric-server", 
+            "text": "Polaric is a really cool combination of APRS daemon that connects to Direwolf, and a Web application that provides a complete mapping solution on the Beaglebone.  One of the really interesting aspects of Polaric, is its ability to serve cached maps from the providers that support that option, making the box really autonomous if required.", 
+            "title": "Polaric server"
+        }, 
+        {
+            "location": "/polaric/#quick-install", 
+            "text": "Polaric can be a bit complicated to compile from scratch, so I am providing a set of binary packages that will get you going in just a few minutes:   polaric-aprsd  polaric-webapp  polaric-webconfig   You will get a lot of unresolved dependencies, and you need to run  sudo apt-get -f install  in order to automatically download and solve all those dependencies.  Configuration  Once Polaric server is installed, you need to configure it   /etc/polaric-aprsd/  /etc/polaric/webapp/  /var/lib/polaric/config.xml   Contain all the setup files. Be careful about the following:   Use your own callsign in  /etc/polaric-aprsd/server.ini  and  /var/lib/polaric/config.xml .   Log rotation and autostart  Like we did for Direwolf, you should make sure polaric's log output is properly handled. This is done through the syslog and logrotate facilities:   /etc/logrotate.d/polaric-aprsd   This way, all of Polaric's log output will be directed to  /var/log/polaric/*.log  and be automatically rotated every day.  Auto start is handled in the init scripts:   /etc/init.d/polaric-aprsd  /etc/init.d/polaric-webapp", 
+            "title": "Quick install"
+        }, 
+        {
+            "location": "/polaric/#compiling-polaric-yourself", 
+            "text": "You do not need to do this if you followed the steps above!  First, install the build dependencies:  sudo apt-get install debhelper gettext-base libgettext-commons-java  openjdk-8-jdk scala byacc-j librxtx-java jflex closure-compiler  Modify the aprsd Makefile to use byaccj instead of yacc.  In webapp, modify compile-js.sh to add alias ccompile=closure-compiler at the beginning of the file.  You can then build the Debian packages for aprsd, webapp and webconfig-plugin (in that order) by launching  fakeroot ./debian/rules binary  in each project directory (aprsd, webapp, webconfig-plugin).", 
+            "title": "Compiling Polaric yourself"
+        }, 
+        {
+            "location": "/admin/", 
+            "text": "", 
+            "title": "Admin configuration"
+        }
+    ]
+}

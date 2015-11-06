@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Overview - APRS Box Documentation</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">APRS Box Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Overview</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../userdoc/">User guide</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../hardware/">Hardware</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Software <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li class="active">
+    <a href="./">Overview</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../direwolf/">Direwolf</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../polaric/">Polaric Server</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../admin/">Admin configuration</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../hardware/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../direwolf/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#software-installation">Software installation</a></li>
+        
+            <li><a href="#quick-start-guide">Quick start guide</a></li>
+        
+            <li><a href="#software-components">Software components</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="software-installation">Software installation</h1>
+<p>This guide takes you across two tracks:</p>
+<ul>
+<li>Detailed description of the software setup</li>
+<li>Quick start guide to let you configure the box in (almost) 'fire and forget' mode</li>
+</ul>
+<p>The software installation covers the following elements:</p>
+<ul>
+<li>TNC (radio modem)</li>
+<li>Mapping server</li>
+<li>Monitoring facility</li>
+<li>System configuration for long term autonomous runnning</li>
+</ul>
+<h2 id="quick-start-guide">Quick start guide</h2>
+<h3 id="operating-system-installation">Operating system installation</h3>
+<p>You will need a decent sizer uSD card – 32GB is perfect if you intend to store a lot of offline maps.</p>
+<p>Use Debian Jessie 8 (http://elinux.org/BeagleBoardDebian#BeagleBone.2FBeagleBone_Black), and downgrade kernel to 3.8 series to enable the use of the audio cape – the current edge kernel is in flux when it comes to BBB capes support.</p>
+<pre><code>apt-get install l linux-image-3.8.13-bone73
+</code></pre>
+
+<p>After reboot, you should disable the built-in default HDMI cape which takes over the BBB audio channels: edit <code>/boot/uEnv.txt</code> and add the cape_disable and cape_enable lines below the <code>uname_r</code> key:</p>
+<pre><code>uname_r=3.8.13-bone73
+
+cape_disable=capemgr.disable_partno=BB-BONELT-HDMI
+cape_enable=capemgr.enable_partno=BB-BONE-AUDI-02
+</code></pre>
+
+<p>The disable of HDMI is required because the Audio Cape uses the BBB's built-in audio chip which is normally used by HDMI, so it won't run if HDMI is enabled.</p>
+<p>You should then reboot, and  launch <code>alsamixer</code> to check everything is loading.</p>
+<h3 id="sound-card-configuration">Sound card configuration</h3>
+<p>The radio audio output is connected to the BBB using the BLUE jack.</p>
+<p>In alsamixer, you will need to mute all "Right PGA Mixer XXX" and "Left PGA Mixer XXX" EXCEPT "Right PGA Mixer Mic3L" and "Left PGA Mixer Mic3L". Be very careful to enable Mic3L in BOTH cases, other if you use a fancy radio like the Elecraft KX3, the “stereo” effect of the radio messes everything up!</p>
+<h2 id="software-components">Software components</h2>
+<p>Before installing any of the additional software components below, make sure you have all the fundamentals for compilation installed on your Beaglebone:</p>
+<pre><code>sudo apt-get install cmake build-essential libusb-1.0-0-dev libasound2-dev
+</code></pre>
+
+<h3 id="direwolf">Direwolf</h3>
+<p><a href="../direwolf/">Direwolf</a> is our sound card modem.</p>
+<h3 id="polaric-server">Polaric server</h3>
+<p><a href="../polaric/">Polaric</a> is used to map APRS stations on a web site.</p>
+<h3 id="monitoring">Monitoring</h3>
+<p>We are using log.io to provide a simple read-only interface to monitor how the box is doing. In day to day use, this has proved very valuable to check that the box is running smoothly.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
