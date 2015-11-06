@@ -1,0 +1,83 @@
+#.
+# Se http://aprs.no/dokuwiki/doku.php?id=filter.profiles for dokumentasjon. 
+#
+
+TrackHide = NOT moving AND
+            NOT ident~"LE.*" AND
+            symbol ~ ".#|E0|I0|.&|[/\\]-|/_|/y|/r|\\j|.a" ;
+
+IrlpNode  = symbol ~ "I0" AND ident ~ "IRLP.*" ;
+EchoLink  = symbol ~ "E0" AND ident ~ "EL.*" ;
+
+Weather   = symbol ~ "/_" ;
+
+
+############################
+# Weather stations
+############################
+
+PUBLIC PROFILE wx {
+   NOT Weather => { hide-all };
+}
+
+
+
+#############################
+# Vis alt
+#############################
+
+PUBLIC PROFILE alle {
+}
+
+
+################################################
+# Track mode. Skjul ident for infrastruktur og
+# andre ting som ikke er så "interessant"
+################################################
+
+PUBLIC PROFILE track {
+   TrackHide      => { hide-ident };
+}
+
+
+    
+##################################################
+# Vis kun LE kallesignal
+################################################## 
+    
+PUBLIC PROFILE le {
+   NOT ident ~ "LE.+" => { hide-all };
+}
+                                                                          
+                                
+###################################################
+# Infrastruktur - basert på kallesignal og symbol
+###################################################
+
+PUBLIC PROFILE infra {
+   NOT (ident ~ "LD.+" OR symbol ~ "/r|.#" OR IrlpNode OR EchoLink OR infra)
+       => { hide-all };
+}
+
+
+######################################
+# Aktiv infrastruktur.
+######################################
+
+PUBLIC PROFILE ainfra {
+   NOT infra => { hide-all  };
+   infra     => { show-path };
+   fulldigi  => { style = "wdigi" };
+   igate     => { style = "igate" };
+}
+
+
+###################################
+# Vis kun bevegelige
+###################################
+
+PUBLIC PROFILE moving {
+    NOT moving => { hide-all };
+}
+
+

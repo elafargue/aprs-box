@@ -1,0 +1,51 @@
+#!/bin/sh
+# kFreeBSD do not accept scripts as interpreters, using #!/bin/sh and sourcing.
+if [ true != "$INIT_D_SCRIPT_SOURCED" ] ; then
+    set "$0" "$@"; INIT_D_SCRIPT_SOURCED=true . /lib/init/init-d-script
+fi
+### BEGIN INIT INFO
+# Provides:          direwolf
+# Required-Start:    $network $local_fs $time
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+### END INIT INFO
+
+
+# Author:  Ed Lafargue <ed@wizkers.io>
+#
+
+DESC="Direwolf APRS Daemon"
+DAEMON=/usr/local/bin/direwolf
+CONF=/etc/direwolf/direwolf.conf
+
+test -x $DAEMON || exit 0
+
+case "$1" in
+	start)
+	log_begin_msg "Enabling Audio Cape"
+	#echo BB-BONE-AUDI-02 > /sys/devices/bone_capemgr.9/slots
+	# Need to sleep to give Alsa time to reload the settings
+	# sleep 5
+	log_end_msg 0
+	log_begin_msg "Starting Direwolf"
+	$DAEMON -c $CONF -t 0 | logger -p local0.info -t direwolf 2>&1 &
+	# Let Direwolf start before opening the KISS virtual PTY
+	sleep 5
+	#socat PTY,link=/tmp/kisstnc,raw,echo=0 TCP4:127.0.0.1:8001 &
+	log_end_msg 0
+	;;
+	stop)
+	;;
+	restart|force-reload)
+	$0 start
+	;;
+	status)
+	$PROGRAM –show
+	;;
+	*)
+	log_failure_msg "Usage: $PROGRAM {start|stop|restart|force-reload|status}"
+	exit 1
+esac
+
+exit 0

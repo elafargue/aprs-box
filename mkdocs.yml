@@ -1,0 +1,11 @@
+site_name: APRS Box Documentation
+pages:
+- Overview: index.md
+- Users: userdoc.md
+- Hardware: hardware.md
+- Software:
+    - Overview: software.md
+    - Direwolf: direwolf.md
+    - Polaric Server: polaric.md
+    - Admin configuration: admin.md
+

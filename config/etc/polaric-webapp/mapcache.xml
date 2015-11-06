@@ -1,0 +1,288 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+ <mapcache>
+   <!--
+   *******************************************************
+   Set up caches here. Files, sqlite, mbtiles, etc..
+   *******************************************************
+   -->
+
+   <cache name="osm_sqlite" type="sqlite3">
+    <dbfile>/var/lib/polaric/mapcache/maps_osm.db</dbfile>
+   </cache>
+
+   <cache name="usgs_topo" type="sqlite3">
+     <dbfile>/var/lib/polaric/mapcache/usgs_topo.db</dbfile>
+   </cache>
+   
+   <cache name="usgs_imagery" type="sqlite3">
+     <dbfile>/var/lib/polaric/mapcache/usgs_imagery.db</dbfile>
+   </cache>
+
+   <!-- This one is not working properly - returns all black images -->
+   <cache name="usgs_eros_ortho" type="sqlite3">
+    <dbfile>/var/lib/polaric/mapcache/usgs_eros_ortho.db</dbfile>
+   </cache>
+
+   <cache name="usgs_shaded_relief" type="sqlite3">
+     <dbfile>/var/lib/polaric/mapcache/usgs_shared_relief.db</dbfile>
+   </cache>
+   
+   <!--
+   **********************************************************************
+   Set up sources here.
+   It is typically an external WMS service. Mapcache supports some
+   other source types like mapserver mapfiles.
+   **********************************************************************
+   -->
+
+  <!-- German WMS server setup for OSM data, with its own theme -->
+  <!-- http://www.osm-wms.de/ -->
+  <source name="osm_cache" type="wms">
+   <getmap>
+     <params>
+        <FORMAT>image/png</FORMAT>
+         <LAYERS>osm_auto:all</LAYERS>
+       </params>
+     </getmap>
+      <http>
+       <url>http://129.206.228.72/cached/osm?</url>
+     </http>
+   </source> 
+
+  <source name="usgs_topo_cache" type="wms">
+   <getmap>
+     <params>
+       <FORMAT>image/jpeg</FORMAT>
+       <LAYERS>0</LAYERS>
+     </params>
+   </getmap>
+    <http>
+     <url>http://basemap.nationalmap.gov/arcgis/services/USGSTopo/MapServer/WMSServer</url>
+    </http>
+  </source>
+
+  <source name="usgs_imagery_cache" type="wms">
+   <getmap>
+     <params>
+       <FORMAT>image/png</FORMAT>
+       <LAYERS>0</LAYERS>
+     </params>
+   </getmap>
+    <http>
+     <url>http://basemap.nationalmap.gov/arcgis/services/USGSImageryOnly/MapServer/WMSServer</url>
+    </http>
+  </source>
+
+  <source name="usgs_shaded_cache" type="wms">
+    <getmap>
+     <params>
+       <FORMAT>image/png</FORMAT>
+       <LAYERS>0</LAYERS>
+     </params>
+    </getmap>
+    <http>
+      <url>http://basemap.nationalmap.gov/arcgis/services/USGSShadedReliefOnly/MapServer/WMSServer</url>
+    </http>
+  </source>
+   
+   <!-- Does not work properly, to be debugged -->
+  <source name="usgs_eros_cache" type="wms">
+   <getmap>
+     <params>
+       <FORMAT>image/jpeg</FORMAT>
+       <LAYERS>0</LAYERS>
+     </params>
+   </getmap>
+    <http>
+     <url>http://raster.nationalmap.gov/arcgis/services/Orthoimagery/USGS_EROS_Ortho_SCALE/ImageServer/WMSServer</url>
+    </http>
+  </source>
+   <!--
+   **********************************************************************
+   Set up grids here.
+   A grid defines map projection, tile size, extent and resolutions.
+   
+   Resolutions must match the resolutions for the OpenLayers client.
+   If using tiled cache services (e.g. Kartverket) as sources, we
+   must match their resolutions exactly as well
+   (see also mapconfig.js).
+   **********************************************************************
+   -->
+   <grid name="utm32">
+     <metadata>
+       <title>UTM zone 32 for Norway. Matches Kartverket cache-service.</title>
+     </metadata>
+     
+     <srs>EPSG:32632</srs>
+     <size>256 256</size>
+     <extent> -2000000,3500000,3545984,9045984 </extent>
+     <resolutions>1354.0 677.0 338.5 169.25 84.625 42.3125 21.15625 10.5781248 5.2890624 2.6445312 1.3222656 0.6611328</resolutions>
+   </grid>
+   
+   <grid name="utm33">
+     <metadata>
+       <title>UTM zone 33 for Norway.  Matches Kartverket cache-service.</title>
+     </metadata>
+     
+     <srs>EPSG:32633</srs>
+     <size>256 256</size>
+     <extent> -2500000.0,3500000.0,3045984.0,9045984.0 </extent>
+     <resolutions>1354.0 677.0 338.5 169.25 84.625 42.3125 21.15625 10.5781248 5.2890624 2.6445312 1.3222656 0.6611328</resolutions>
+   </grid>
+
+<!-- Directly from http://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer -->
+   <grid name="usgs_102100_topo">
+     <metadata>
+       <title>USGSTopo standard grid</title>
+     </metadata>
+     <srs>EPSG:102100</srs> 
+     <size>256 256</size>
+     <extent>-2.0037507067161843E7, -3.0240971958386254E7, 2.0037507067161843E7, 3.0240971958386205E7</extent>
+     <resolutions>156543.03392800014 78271.51696399994 39135.75848200009 19567.87924099992 9783.93962049996 4891.96981024998 2445.98490512499 1222.992452562495 611.4962262813797 305.74811314055756 152.87405657041106 76.43702828507324 38.21851414253662 19.10925707126831 9.554628535634155 4.77731426794937 2.388657133974685 1.1943285668550503 0.5971642835598172 0.29858214164761665</resolutions>
+  </grid>
+
+   <grid name="usgs_102100_ortho">
+     <metadata>
+       <title>USGSTopo standard grid</title>
+     </metadata>
+     <srs>EPSG:102100</srs> 
+     <size>256 256</size>
+     <extent>-20037294.014300, -20037293.992700, 20037294.035700, 20037294.007300</extent>
+     <resolutions>156543.03392800014 78271.51696399994 39135.75848200009 19567.87924099992 9783.93962049996 4891.96981024998 2445.98490512499 1222.992452562495 611.4962262813797 305.74811314055756 152.87405657041106 76.43702828507324 38.21851414253662 19.10925707126831 9.554628535634155 4.77731426794937 2.388657133974685 1.1943285668550503 0.5971642835598172 0.29858214164761665</resolutions>
+  </grid>
+   
+   <!--
+   ********************************************************************
+    Set up tilesets here.
+    A tileset defines a source, a cache, a grid and a format as well
+    as a metatile size, and expire time. auto_expire is the numbers
+    of seconds before the server cache expire and will try to reload. 
+    0 means - never expire. 
+   ********************************************************************
+   -->
+
+   <tileset name="osm_cache">
+     <source>osm_cache</source>
+     <cache>osm_sqlite</cache>
+     <format>mixed</format>
+     <grid>g</grid>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <expires>604800</expires>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+   <tileset name="usgs_topo_cache">
+     <source>usgs_topo_cache</source>
+     <cache>usgs_topo</cache>
+     <format>jpeg_high</format>
+     <grid>usgs_102100_topo</grid>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <expires>604800</expires>
+     <auto_expire>0</auto_expire>
+   </tileset>   
+
+   <tileset name="usgs_imagery_cache">
+     <source>usgs_imagery_cache</source>
+     <cache>usgs_imagery</cache>
+     <format>mixed</format>
+     <grid>usgs_102100_topo</grid>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <expires>604800</expires>
+     <auto_expire>0</auto_expire>
+   </tileset>   
+
+   <tileset name="usgs_shaded_relief">
+     <source>usgs_shaded_cache</source>
+     <cache>usgs_shaded_relief</cache>
+     <format>mixed</format>
+     <grid>usgs_102100_topo</grid>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <expires>604800</expires>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+  <!-- Does not work properly, to be debugged -->
+  <tileset name="usgs_eros_ortho">
+     <source>usgs_eros_cache</source>
+     <cache>usgs_eros_ortho</cache>
+     <format>mixed</format>
+     <grid>WGS84</grid>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <expires>604800</expires>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+
+<!-- Adjustment of image quality -->
+<format name="PNG_FAST" type ="PNG">
+
+   <!-- compression
+
+        png compression: best or fast
+        note that "best" compression is cpu intensive for little gain over the default
+        default compression is obtained by leving out this tag.
+   -->
+   <compression>fast</compression>
+
+   <!-- colors
+
+      if supplied, this enables png quantization which reduces the number of colors
+      in an image to atain higher compression. this operation is destructive, and can
+      cause artifacts in the stored image.
+      the number of colors can be between 2 and 256
+  -->
+  <!-- <colors>256</colors> -->
+</format>
+<format name="jpeg_high" type ="JPEG">
+   <!-- quality
+
+        JPEG compression quality, ranging from 0 to 100
+        95 produces high quality images with few visual artifacts
+        values under around 80 produce small images but with visible artifacts.
+        YMMV
+   -->
+   <quality>85</quality>
+
+   <!-- photometric
+
+       photometric interpretation of the bands created in the jpeg image.
+       default is ycbcr and produces the smallest images. can also be "rgb"
+       which ususally results in x2 or x3 image sizes.
+   -->
+   <photometric>ycbcr</photometric>
+
+</format>
+<format name="PNG_BEST" type ="PNG">
+   <compression>best</compression>
+</format>
+
+<format name="mixed" type="MIXED">
+   <transparent>PNG_BEST</transparent>
+   <opaque>JPEG</opaque>
+</format>
+   
+   <default_format>JPEG</default_format>
+   
+   <service type="wms" enabled="true">
+     <full_wms>assemble</full_wms>
+     <resample_mode>bilinear</resample_mode>
+     <format>JPEG</format>
+     <maxsize>4096</maxsize>
+   </service>
+   
+   <service type="wmts" enabled="true"/>
+   <service type="tms" enabled="true"/>
+   
+   <errors>report</errors>
+   <lock_dir>/tmp</lock_dir>
+   
+ </mapcache>
+ 
+ 
+   

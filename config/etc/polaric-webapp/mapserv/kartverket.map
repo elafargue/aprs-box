@@ -1,0 +1,84 @@
+MAP
+#
+# Start of map file
+#
+NAME TOPO2
+STATUS ON
+SIZE 255 255
+
+# EXTENT 216019.694853 6558834.711082 247132.694853 6590731.304749
+
+EXTENT 412160.083500 7524179.916500 939092.083500 7936174.917000
+ 
+
+UNITS METERS
+SHAPEPATH "Kartverket_Topo2"
+IMAGECOLOR 161 193 201
+
+WEB
+     IMAGEPATH "/tmp/wms"
+     IMAGEURL "/tmp/wms"
+END
+
+
+# you may need to change this to match your MapServer build
+IMAGETYPE JPEG
+
+#
+# Projection definition, consult the PROJ.4 documentation for parameter discussion
+#
+PROJECTION
+  "proj=utm"
+  "ellps=WGS84"
+  "datum=WGS84"
+  "zone=33"
+  "units=m"
+  "north"
+  "no_defs"
+END
+
+
+LAYER
+   NAME "kartverket_europa"
+   TYPE RASTER
+   STATUS ON
+ 
+   CONNECTION "http://openwms.statkart.no/skwms1/wms.europa?REQUEST=GetMap&"
+   CONNECTIONTYPE WMS
+   DEBUG ON
+   MINSCALE 150000
+
+   METADATA
+      "wms_connectiontimeout" "120"
+      "wms_srs"             "EPSG:32633"
+      "wms_name"            "Europa_WMS"
+      "wms_title"           "Europa_WMS"
+      "wms_server_version"  "1.1.1"
+      "wms_format"          "image/png"
+   END
+END
+
+
+
+LAYER
+   NAME "kartverket_topo2"
+   TYPE RASTER
+   STATUS ON
+ 
+   CONNECTION "http://openwms.statkart.no/skwms1/wms.topo2?REQUEST=GetMap&"
+   CONNECTIONTYPE WMS
+   DEBUG ON
+
+   METADATA
+      "wms_connectiontimeout" "120"
+      "wms_srs"             "EPSG:32633"
+      "wms_name"            "topo2_WMS"
+      "wms_title"           "topo2_WMS"
+      "wms_server_version"  "1.1.1"
+      "wms_format"          "image/png"
+   END
+END
+
+
+
+END
