@@ -1,7 +1,7 @@
 site_name: APRS Box Documentation
 pages:
 - Overview: index.md
-- Users: userdoc.md
+- User guide: userdoc.md
 - Hardware: hardware.md
 - Software:
     - Overview: software.md
