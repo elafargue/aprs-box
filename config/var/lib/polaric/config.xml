@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Configuration for Polaric APRSD</comment>
+<entry key="channel.aprsIS.host">127.0.0.1</entry>
+<entry key="channel.aprsIS.restrict">false</entry>
+<entry key="channels">tnc,radio,aprsc</entry>
+<entry key="channel.tnc.host">127.0.0.1</entry>
+<entry key="channel.default.inet">aprsc</entry>
+<entry key="channel.aprsc.port">14580</entry>
+<entry key="channel.aprsc.filter">m/50 r/37.443/-122.128/50</entry>
+<entry key="message.rfpath">WIDE2-2</entry>
+<entry key="channel.default.rf">tnc</entry>
+<entry key="channel.aprsc.host">127.0.0.1</entry>
+<entry key="channel.aprsIS.on">true</entry>
+<entry key="channel.tnc.on">true</entry>
+<entry key="objects.rfgate.range">60</entry>
+<entry key="channel.aprsc.restrict">false</entry>
+<entry key="channel.tnc.restrict">false</entry>
+<entry key="aprs.expiretime">60</entry>
+<entry key="objects.rfpath">WIDE2-2</entry>
+<entry key="igate.rfgate.path">WIDE2-2</entry>
+<entry key="channel.aprsis.type">TNC2</entry>
+<entry key="igate.on">true</entry>
+<entry key="channel.aprsIS.type">TCPKISS</entry>
+<entry key="channel.tnc.type">TCPKISS</entry>
+<entry key="channel.aprsc.pass">8344</entry>
+<entry key="objects.rfgate.allow">false</entry>
+<entry key="map.trail.maxAge">60</entry>
+<entry key="igate.rfgate.allow">true</entry>
+<entry key="map.trail.maxPause">30</entry>
+<entry key="channel.aprsc.type">APRSIS</entry>
+<entry key="channel.tnc.port">8001</entry>
+<entry key="channel.aprsIS.port">8001</entry>
+<entry key="channel.aprsc.on">true</entry>
+</properties>
