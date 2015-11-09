@@ -15,6 +15,7 @@ fi
 # Author:  Ed Lafargue <ed@wizkers.io>
 #
 
+PATH=$PATH:/usr/local/bin
 DESC="Direwolf APRS Daemon"
 DAEMON=/usr/local/bin/direwolf
 CONF=/etc/direwolf/direwolf.conf
@@ -31,7 +32,7 @@ case "$1" in
 	log_begin_msg "Starting Direwolf"
 	$DAEMON -c $CONF -t 0 | logger -p local0.info -t direwolf 2>&1 &
 	# Let Direwolf start before opening the KISS virtual PTY
-	sleep 5
+	#sleep 5
 	#socat PTY,link=/tmp/kisstnc,raw,echo=0 TCP4:127.0.0.1:8001 &
 	log_end_msg 0
 	;;
