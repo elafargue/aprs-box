@@ -164,9 +164,14 @@
 <p>For this build, I elected to use the Beaglebone Audio cape (version 2). There are many things I find irritating with this sound card, and its drivers are very rough around the edges, but all in all, it does the job if you are careful. This doc describes how to make it work properly, and I spent quite a few hours doing that...</p>
 <h2 id="ptt-switch">PTT Switch</h2>
 <p>The last hardware part is a way to key your radio transceiver. This is actually very straightforward: if you look at the documentation of Direwolf (which is audio modem we are using), you can simply use GPIO lines on your BeagleBone with a simple transistor, and you're in business.</p>
-<p>On this setup, I am using the following GPIOs:
-- Connector P9 pin 14 (GPIO 50) : DCD Led. Lights up when Direwolf detects a radio carrier
-- Connector P9 pin 16 (GPIO 51): PTT key. You will probably need a PNP transistor to key your radio, depending on the model.</p>
+<p>On this setup, I am using the following GPIOs:</p>
+<ul>
+<li>Connector P9 pin 14 (GPIO 50) : DCD Led. Lights up when Direwolf detects a radio carrier</li>
+<li>Connector P9 pin 16 (GPIO 51): PTT key. You will probably need a PNP transistor to key your radio, depending on the model</li>
+</ul>
+<p>The schematics below show one very simple way of connecting a Kenwood/Baofeng style radio that requires grounding the PTT line to key it. The transistor can be a 2N2222 or similar:</p>
+<p><img alt="Baofeng PTT" src="../img/baofeng_ptt.png" /></p>
+<p>You should use a ferrite choke on the line that goes from your radio mic/headphone plug to the sound card of your Beaglebone/Rapsberry Pi, to prevent spontaneous resets or other issues when the radio is transmitting. Though the risk is low with a well matched antenna, that sort of simple protection will prevent a lot of head scratching and frustration down the line.</p>
 <h2 id="optional-components">Optional components</h2>
 <p>One of the Beaglebone's great features is its ability to operate on USB power, which makes it a truly portable setup. But for general use, you might want to install a small WiFi USB dongle and turn it into a WiFi access point. More on this in the configuration section.</p></div>
             
