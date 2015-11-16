@@ -21,8 +21,15 @@ For this build, I elected to use the Beaglebone Audio cape (version 2). There ar
 The last hardware part is a way to key your radio transceiver. This is actually very straightforward: if you look at the documentation of Direwolf (which is audio modem we are using), you can simply use GPIO lines on your BeagleBone with a simple transistor, and you're in business.
 
 On this setup, I am using the following GPIOs:
+
 - Connector P9 pin 14 (GPIO 50) : DCD Led. Lights up when Direwolf detects a radio carrier
-- Connector P9 pin 16 (GPIO 51): PTT key. You will probably need a PNP transistor to key your radio, depending on the model.
+- Connector P9 pin 16 (GPIO 51): PTT key. You will probably need a PNP transistor to key your radio, depending on the model
+
+The schematics below show one very simple way of connecting a Kenwood/Baofeng style radio that requires grounding the PTT line to key it. The transistor can be a 2N2222 or similar:
+
+![Baofeng PTT](img/baofeng_ptt.png)
+
+You should use a ferrite choke on the line that goes from your radio mic/headphone plug to the sound card of your Beaglebone/Rapsberry Pi, to prevent spontaneous resets or other issues when the radio is transmitting. Though the risk is low with a well matched antenna, that sort of simple protection will prevent a lot of head scratching and frustration down the line.
 
 ## Optional components
 
