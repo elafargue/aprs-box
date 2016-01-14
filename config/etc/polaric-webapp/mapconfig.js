@@ -177,7 +177,8 @@ var filterViews = [
    { name: 'infra',  title: 'Infrastructure'},
    { name: 'ainfra', title: 'Active infrastructure'},
    { name: 'moving', title: 'Moving objects'},
-   { name: 'wx',     title: 'Weather stations'}
+   { name: 'wx',     title: 'Weather stations'},
+   { name: 'telemetry', title: 'Telemetry stations'}
 ];
 
 /* View to be selected by default */
