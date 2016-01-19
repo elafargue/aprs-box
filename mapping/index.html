@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Overview - APRS Box Documentation</title>
+	<title>Local maps - APRS Box Documentation</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
@@ -76,8 +76,8 @@
                         <ul class="dropdown-menu">
                         
                             
-<li class="active">
-    <a href="./">Overview</a>
+<li >
+    <a href="../software/">Overview</a>
 </li>
 
                         
@@ -94,8 +94,8 @@
 
                         
                             
-<li >
-    <a href="../mapping/">Local maps</a>
+<li class="active">
+    <a href="./">Local maps</a>
 </li>
 
                         
@@ -120,12 +120,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../hardware/">
+                        <a rel="next" href="../polaric/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../direwolf/">
+                        <a rel="prev" href="../admin/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -141,60 +141,30 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#software-installation">Software installation</a></li>
+        <li class="main active"><a href="#mapping">Mapping</a></li>
         
-            <li><a href="#quick-start-guide">Quick start guide</a></li>
+            <li><a href="#online-maps">Online maps</a></li>
         
-            <li><a href="#software-components">Software components</a></li>
+            <li><a href="#onlineoffline-maps">Online/offline maps</a></li>
+        
+            <li><a href="#overall-performance">Overall performance</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="software-installation">Software installation</h1>
-<p>This guide takes you across two tracks:</p>
-<ul>
-<li>Detailed description of the software setup</li>
-<li>Quick start guide to let you configure the box in (almost) 'fire and forget' mode</li>
-</ul>
-<p>The software installation covers the following elements:</p>
-<ul>
-<li>TNC (radio modem)</li>
-<li>Mapping server</li>
-<li>Monitoring facility</li>
-<li>System configuration for long term autonomous runnning</li>
-</ul>
-<h2 id="quick-start-guide">Quick start guide</h2>
-<h3 id="operating-system-installation">Operating system installation</h3>
-<p>You will need a decent sizer uSD card – 32GB is perfect if you intend to store a lot of offline maps.</p>
-<p>Use Debian Jessie 8 (http://elinux.org/BeagleBoardDebian#BeagleBone.2FBeagleBone_Black), and downgrade kernel to 3.8 series to enable the use of the audio cape – the current edge kernel is in flux when it comes to BBB capes support.</p>
-<pre><code>apt-get install l linux-image-3.8.13-bone73
-</code></pre>
-
-<p>After reboot, you should disable the built-in default HDMI cape which takes over the BBB audio channels: edit <code>/boot/uEnv.txt</code> and add the cape_disable and cape_enable lines below the <code>uname_r</code> key:</p>
-<pre><code>uname_r=3.8.13-bone73
-
-cape_disable=capemgr.disable_partno=BB-BONELT-HDMI
-cape_enable=capemgr.enable_partno=BB-BONE-AUDI-02
-</code></pre>
-
-<p>The disable of HDMI is required because the Audio Cape uses the BBB's built-in audio chip which is normally used by HDMI, so it won't run if HDMI is enabled.</p>
-<p>You should then reboot, and  launch <code>alsamixer</code> to check everything is loading.</p>
-<h3 id="sound-card-configuration">Sound card configuration</h3>
-<p>The radio audio output is connected to the BBB using the BLUE jack.</p>
-<p>In alsamixer, you will need to mute all "Right PGA Mixer XXX" and "Left PGA Mixer XXX" EXCEPT "Right PGA Mixer Mic3L" and "Left PGA Mixer Mic3L". Be very careful to enable Mic3L in BOTH cases, other if you use a fancy radio like the Elecraft KX3, the “stereo” effect of the radio messes everything up!</p>
-<h2 id="software-components">Software components</h2>
-<p>Before installing any of the additional software components below, make sure you have all the fundamentals for compilation installed on your Beaglebone:</p>
-<pre><code>sudo apt-get install cmake build-essential libusb-1.0-0-dev libasound2-dev
-</code></pre>
-
-<h3 id="direwolf">Direwolf</h3>
-<p><a href="../direwolf/">Direwolf</a> is our sound card modem.</p>
-<h3 id="polaric-server">Polaric server</h3>
-<p><a href="../polaric/">Polaric</a> is used to map APRS stations on a web site.</p>
-<h3 id="monitoring">Monitoring</h3>
-<p>We are using log.io to provide a simple read-only interface to monitor how the box is doing. In day to day use, this has proved very valuable to check that the box is running smoothly.</p></div>
+<h1 id="mapping">Mapping</h1>
+<p>One of the strengths of Polaric-webapp is that it can leverage mapcache to create a local cache of maps on the server - a Beaglebone in our case. This means that even without an Internet connection, you will still be able to run the Web app with actual maps.</p>
+<h2 id="online-maps">Online maps</h2>
+<p>When you have an Internet connection, there is no reason not to use OpenstreetMaps or Google maps. The map configuration in <a href="https://github.com/elafargue/aprs-box/blob/master/config/etc/polaric-webapp/mapconfig.js">/etc/polaric-webapp/mapconfig.js</a> defines OpenstreetMaps, and multiple Google Maps layers by default.</p>
+<p>Google Maps, in particular, does not allow you to cache its contents, so you will always need to be online to use those maps.</p>
+<h2 id="onlineoffline-maps">Online/offline maps</h2>
+<p>Polaric-webapp (the OpenLayer subsystem of Webapp, really) is configured to leverage "mapcache". Mapcache requires a source that can talk the WMS protocol, and is able to locally proxy and cache the contents of maps, making them available offline - indefinitely if the expiry date of the cache is set to zero.</p>
+<p>For North America, there are several map providers that work great with Mapcache, and are pre-configured in <code>mapconfig.js</code> : the USGS topo and satellite maps.</p>
+<p>The OpenStreetMaps wiki <a href="http://wiki.openstreetmap.org/wiki/WMS">mentions WMS</a> but I had very limited success with any of the providers mentioned there.</p>
+<h2 id="overall-performance">Overall performance</h2>
+<p>On a Beaglebone black, map serving and caching, while not great, is perfectly adequate for a couple of users.</p></div>
             
         </div>
 

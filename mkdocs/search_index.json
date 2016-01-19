@@ -131,6 +131,31 @@
             "title": "Compiling Polaric yourself"
         }, 
         {
+            "location": "/mapping/", 
+            "text": "Mapping\n\n\nOne of the strengths of Polaric-webapp is that it can leverage mapcache to create a local cache of maps on the server - a Beaglebone in our case. This means that even without an Internet connection, you will still be able to run the Web app with actual maps.\n\n\nOnline maps\n\n\nWhen you have an Internet connection, there is no reason not to use OpenstreetMaps or Google maps. The map configuration in \n/etc/polaric-webapp/mapconfig.js\n defines OpenstreetMaps, and multiple Google Maps layers by default.\n\n\nGoogle Maps, in particular, does not allow you to cache its contents, so you will always need to be online to use those maps.\n\n\nOnline/offline maps\n\n\nPolaric-webapp (the OpenLayer subsystem of Webapp, really) is configured to leverage \"mapcache\". Mapcache requires a source that can talk the WMS protocol, and is able to locally proxy and cache the contents of maps, making them available offline - indefinitely if the expiry date of the cache is set to zero.\n\n\nFor North America, there are several map providers that work great with Mapcache, and are pre-configured in \nmapconfig.js\n : the USGS topo and satellite maps.\n\n\nThe OpenStreetMaps wiki \nmentions WMS\n but I had very limited success with any of the providers mentioned there.\n\n\nOverall performance\n\n\nOn a Beaglebone black, map serving and caching, while not great, is perfectly adequate for a couple of users.", 
+            "title": "Local maps"
+        }, 
+        {
+            "location": "/mapping/#mapping", 
+            "text": "One of the strengths of Polaric-webapp is that it can leverage mapcache to create a local cache of maps on the server - a Beaglebone in our case. This means that even without an Internet connection, you will still be able to run the Web app with actual maps.", 
+            "title": "Mapping"
+        }, 
+        {
+            "location": "/mapping/#online-maps", 
+            "text": "When you have an Internet connection, there is no reason not to use OpenstreetMaps or Google maps. The map configuration in  /etc/polaric-webapp/mapconfig.js  defines OpenstreetMaps, and multiple Google Maps layers by default.  Google Maps, in particular, does not allow you to cache its contents, so you will always need to be online to use those maps.", 
+            "title": "Online maps"
+        }, 
+        {
+            "location": "/mapping/#onlineoffline-maps", 
+            "text": "Polaric-webapp (the OpenLayer subsystem of Webapp, really) is configured to leverage \"mapcache\". Mapcache requires a source that can talk the WMS protocol, and is able to locally proxy and cache the contents of maps, making them available offline - indefinitely if the expiry date of the cache is set to zero.  For North America, there are several map providers that work great with Mapcache, and are pre-configured in  mapconfig.js  : the USGS topo and satellite maps.  The OpenStreetMaps wiki  mentions WMS  but I had very limited success with any of the providers mentioned there.", 
+            "title": "Online/offline maps"
+        }, 
+        {
+            "location": "/mapping/#overall-performance", 
+            "text": "On a Beaglebone black, map serving and caching, while not great, is perfectly adequate for a couple of users.", 
+            "title": "Overall performance"
+        }, 
+        {
             "location": "/admin/", 
             "text": "", 
             "title": "Admin configuration"
