@@ -7,5 +7,6 @@ pages:
     - Overview: software.md
     - Direwolf: direwolf.md
     - Polaric Server: polaric.md
+    - Local maps: mapping.md
     - Admin configuration: admin.md
 
