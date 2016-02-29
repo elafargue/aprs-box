@@ -34,6 +34,72 @@ For a box that is running 24/7, you should make sure direwolf's log output is pr
 
 This way, all direwolf log output will be directed to ```/var/log/direwolf.log``` and be automatically rotated every day.
 
+## Configuring sound for Direwolf duplex operations
+
+### Beaglebone Audio Cape
+
+If you are using the Beaglebone audio cape, there seems to be a kind of bug somewhere, where the audio cape hangs when direwolf sends audio. The solution is to define a mixing device in /etc/asound.conf and let Direwolf use this instead of the raw device:
+
+```
+root@aprs:/home/debian# cat /etc/asound.conf
+pcm.card0 {
+    type hw
+    card 0
+# mmap_emulation true
+}
+pcm.dmix0 {
+    type dmix
+    ipc_key 34521
+    slave {
+        pcm "card0"
+    }
+}
+pcm.dsnoop0 {
+    type dsnoop
+    ipc_key 34523
+    slave {
+        pcm "card0"
+    }
+}
+pcm.asym0 {
+    type asym
+    playback.pcm "dmix0"
+    capture.pcm "dsnoop0"
+}
+pcm.pasym0 {
+    type plug
+    slave.pcm "asym0"
+}
+# 'dsp0' is espected by OSS emulation etc.
+pcm.dsp0 {
+    type plug
+    slave.pcm "asym0"
+}
+ctl.dsp0 {
+    type hw
+    card 0
+}
+pcm.!default {
+    type plug
+    slave.pcm "asym0"
+}
+ctl.!default {
+    type hw
+    card 0
+}
+```
+
+Then Direwolf needs to be configured to use pasym0 for its ```ADEVICE```.
+
+### USB Dongles
+
+A lof ot audio cards have a 48kHz clock inside, which generates strong harmonics at 144MHz, not ideal for APRS which is at 144.39
+in North America.
+
+Moreover, lots of USB dongles have a lot of trouble with RPis and BBB's. One dongle family that stands out is the C-Media-based dongles
+which can be bought for about $10 or less on Amazon. Search for SD-CM-UAUD on Amazon for instance, that dongle works great and does not
+have 144MHz harmonics.
+
 ## Automatically starting Direwolf
 
 Then next step is to make sure Direwolf automatically starts when the box boots:

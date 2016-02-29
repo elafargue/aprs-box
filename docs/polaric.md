@@ -8,9 +8,9 @@ One of the really interesting aspects of Polaric, is its ability to serve cached
 
 Polaric can be a bit complicated to compile from scratch, so I am providing a set of binary packages that will get you going in just a few minutes:
 
-- [polaric-aprsd](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-aprsd_1.8.1_all.deb)
-- [polaric-webapp](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-webapp_1.8_all.deb)
-- [polaric-webconfig](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-webconfig-plugin_1.8.0_all.deb)
+- [polaric-aprsd](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-aprsd_1.9_all.deb)
+- [polaric-webapp](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-webapp_1.9_all.deb)
+- [polaric-webconfig](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-webconfig-plugin_1.9.0_all.deb)
 
 You will get a lot of unresolved dependencies, and you need to run
 
