@@ -1,18 +1,34 @@
 # Hardware
 
-The objective of this setup is to be as compact and low power as possible. I selected a BeagleBone Black, but it should be possible to use many different kinds of single board computers:
+The software is compatible with Debian Linux and its derivatives, and Debian Linux 
+can run on many devices. The objective of this setup is to be as compact and low power as possible. 
+Devices which are known to be capable of running the software include: 
 
-- Beaglebone black/green
-- Raspberry Pi
+- Bare metal
+    - Beaglebone black
+    - Raspberry Pi 2B 
+- Docker container with Debian-ish image
+    - Odroid C2 (Running [ArchLinux ARM](https://archlinuxarm.org/))
+
+Other boards which should work:
+
 - CubieBoard
+- Beaglebone green
+
+The Raspberry Pi Zero (Running [HypriotOS](https://blog.hypriot.com/downloads/)) will run the map 
+cache software inside a docker container, and will quite happily seed your map cache
+for you. 
 
 ## Computer board
 
-As mentioned above, pretty much any embedded computer that can run a current version of Linux will be good for this. My personal preference goes to the BeagleBone, though the CubieBoard's built-in sound card certainly sounds like a very interesting choice.
+As mentioned above, pretty much any embedded computer that can run a current version of Linux will 
+be good for this. My personal preference goes to the BeagleBone, though the CubieBoard's 
+built-in sound card certainly sounds like a very interesting choice.
 
 ## Sound card
 
-The sound card is usually the tricky part of those embedded computers. The BeagleBone does not have one, for instance. The CubieBoard does.
+The sound card is usually the tricky part of those embedded computers. The BeagleBone does not have one, 
+for instance. The CubieBoard does. The Raspberry Pi can talk but can't hear.
 
 For this build, I elected to use the Beaglebone Audio cape (version 2). There are many things I find irritating with this sound card, and its drivers are very rough around the edges, but all in all, it does the job if you are careful. This doc describes how to make it work properly, and I spent quite a few hours doing that...
 
@@ -30,6 +46,13 @@ The schematics below show one very simple way of connecting a Kenwood/Baofeng st
 ![Baofeng PTT](img/baofeng_ptt.png)
 
 You should use a ferrite choke on the line that goes from your radio mic/headphone plug to the sound card of your Beaglebone/Rapsberry Pi, to prevent spontaneous resets or other issues when the radio is transmitting. Though the risk is low with a well matched antenna, that sort of simple protection will prevent a lot of head scratching and frustration down the line.
+
+An Open Hardware option from the Maker community is the 
+[Raspberry Pi Radio Interface](https://github.com/jaymzx/RPi-WD-Packet-Interface). 
+In spite of the name, it basically implements the recommended circuit in the Direwolf 
+user manual. The board adapts headphone/microphone jacks to a standard Kantronics
+DB-9 interface so you can buy make or re-use cables. The downside of this option is that you have to 
+get the board made, then stuff it yourself.
 
 ## Optional components
 

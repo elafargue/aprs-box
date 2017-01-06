@@ -1,36 +1,40 @@
 # Polaric server
 
-Polaric is a really cool combination of APRS daemon that connects to Direwolf, and a Web application that provides a complete mapping solution on the Beaglebone.
+Polaric is a really cool complete mapping solution comprised of an APRS daemon 
+that connects to Direwolf, a web application and offline map tile cache.  Polaric 
+is offered as a set of processor-architecture-neutral debian packages or in source
+code form. It is fairly easy to run anywhere that Debian will run, and it is possible 
+to run it on any Linux system where you can satisfy the requirements. This _does_ mean 
+that you can run this same code on your desktop or laptop in addition to any number of
+small ARM based computers.
 
-One of the really interesting aspects of Polaric, is its ability to serve cached maps from the providers that support that option, making the box really autonomous if required.
+One of the really interesting aspects of Polaric is its ability to serve cached map
+tiles, making the box really autonomous if required. 
 
 ## Quick install
 
-Polaric can be a bit complicated to compile from scratch, so I am providing a set of binary packages that will get you going in just a few minutes:
+The Polaric team provides instructions on how to install their system using their binary 
+packages, as well as how configure it with their web configuration plugin. If you're 
+interested in quick, this is by far the best way to go. 
 
-- [polaric-aprsd](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-aprsd_1.9_all.deb)
-- [polaric-webapp](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-webapp_1.9_all.deb)
-- [polaric-webconfig](https://github.com/elafargue/aprs-box/blob/master/packages/polaric-webconfig-plugin_1.9.0_all.deb)
-
-You will get a lot of unresolved dependencies, and you need to run
-
-```
-sudo apt-get -f install
-```
-
-in order to automatically download and solve all those dependencies.
+- [Binary install instructions](http://aprs.no/dokuwiki/?id=install.dev)
 
 ### Configuration
 
-Once Polaric server is installed, you need to configure it
+Once Polaric server is installed, you need to configure it. The best way to configure it,
+as noted on the Polaric team's page, is to use the web configuration plugin. You can review 
+the vast majority of configurable items in these locations: 
 
 - [/etc/polaric-aprsd/](https://github.com/elafargue/aprs-box/tree/master/config/etc/polaric-aprsd)
-- [/etc/polaric/webapp/](https://github.com/elafargue/aprs-box/tree/master/config/etc/polaric-webapp)
+- [/etc/polaric-webapp/](https://github.com/elafargue/aprs-box/tree/master/config/etc/polaric-webapp)
 - [/var/lib/polaric/config.xml](https://github.com/elafargue/aprs-box/blob/master/config/var/lib/polaric/config.xml)
 
-Contain all the setup files. Be careful about the following:
+Be careful about the following:
 
-- Use your own callsign in [/etc/polaric-aprsd/server.ini](https://github.com/elafargue/aprs-box/blob/master/config/etc/polaric-aprsd/server.ini) and [/var/lib/polaric/config.xml](https://github.com/elafargue/aprs-box/blob/master/config/var/lib/polaric/config.xml).
+- Use your own callsign in [/etc/polaric-aprsd/server.ini](https://github.com/elafargue/aprs-box/blob/master/config/etc/polaric-aprsd/server.ini) 
+and [/var/lib/polaric/config.xml](https://github.com/elafargue/aprs-box/blob/master/config/var/lib/polaric/config.xml). 
+(A good reason to use the packages provided by the Polaric team is that you will be prompted for your callsign as 
+part of the install process.)
 
 ### Log rotation and autostart
 
@@ -54,6 +58,15 @@ First, install the build dependencies:
 
 ```
 sudo apt-get install debhelper gettext-base libgettext-commons-java  openjdk-8-jdk scala byacc-j librxtx-java jflex closure-compiler
+```
+
+Then, check out the code from github. Note that there is a separate repository for each major 
+component (aprsd, webapp, and mapcache).
+
+```
+git clone https://github.com/PolaricServer/webapp.git
+git clone https://github.com/PolaricServer/aprsd.git
+git clone https://github.com/PolaricServer/WebConfig-plugin.git
 ```
 
 Modify the aprsd Makefile to use byaccj instead of yacc.
